@@ -1,39 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import server from './server.js';
-import bcrypt from 'bcrypt';
 import axios from 'axios';
+import { serverLink } from './global/global_variables';
 
-export default function App() {
+const App = () => {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  [username, setUsername] = useState([]); 
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post('http://127.0.0.1/api/login', {
-        username: username,
-        password: password,
-      });
-
-      if (response.status === 200) {
-        // Login riuscito, puoi gestire ulteriori azioni qui
-        console.log(response.data.message);
-      } else {
-        // Altri codici di stato possono essere gestiti qui
-        console.error('Errore durante il login:', response.data.error);
-      }
-    } catch (error) {
-      console.error('Errore durante la chiamata API:', error.message);
-    }
-  };
-
+  useEffect(() =>{
+    //console.log(serverLink + 'test?name=Mirko%20Minni');
+    axios.get(serverLink + 'test?name=Mirko%20Minni')
+    .then(data =>{
+      console.log(data);
+      setUsername(data.data[0].name); 
+    }).catch(err =>{
+      console.log(err);
+    })
+  }, [])
 
   return (
     <View style={styles.container}>
       <View style={styles.top} />
-      <Text style={[styles.titolo, styles.titleMargin]}>Benvenuto in Lupus in Fabula</Text>
+      <Text style={[styles.titolo, styles.titleMargin]}>Benvenuto in Lupus in Fabula {username}</Text>
       <View style={styles.form}>
         <View style={styles.divTitolo}>
           <Text style={[styles.titolo, styles.log]}>LOGIN</Text>
@@ -135,3 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default App;
