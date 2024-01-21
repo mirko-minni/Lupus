@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button } from 'react-native';
 import axios from 'axios';
 import { serverLink } from './global/global_variables';
 
 const App = () => {
 
   [username, setUsername] = useState([]); 
+  [password, setPassword] = useState([]);
 
   useEffect(() =>{
-    //console.log(serverLink + 'test?name=Mirko%20Minni');
-    axios.get(serverLink + 'test?name=Mirko%20Minni')
+    axios.get(serverLink + `test?username=${username}`)
     .then(data =>{
       console.log(data);
       setUsername(data.data[0].name); 
@@ -30,19 +30,28 @@ const App = () => {
 
         <View style={styles.inputForm}>
           <Text style={styles.label}>Username</Text>
-          <TextInput style={styles.TxtInput} placeholder="Inserisci username" />
+          <TextInput style={styles.TxtInput} placeholder="Inserisci username" onChangeText={(value) => setUsername(value)}/>
         </View>
 
         <View style={styles.inputForm}>
           <Text style={styles.label}>Password</Text>
-          <TextInput style={styles.TxtInput} placeholder="Inserisci password" secureTextEntry={true} />
+          <TextInput style={styles.TxtInput} placeholder="Inserisci password" secureTextEntry={true} onChangeText={(value) => setPassword(value)}/>
         </View>
 
-        <TouchableOpacity onPress={() => {}} style={styles.buttonForm}>
+        <TouchableOpacity onPress={() => {
+            
+          }
+        } style={styles.buttonForm}>
           <Text style={styles.buttonText}>Accedi</Text>
         </TouchableOpacity>
+        
+        <Text style={styles.congiunzione}>Oppure</Text>
+        <Text style={styles.link} onPress={() => {
+          
+        }}>Registrati</Text>
+        
       </View>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </View>
   );
 }
@@ -122,6 +131,15 @@ const styles = StyleSheet.create({
   inputForm: {
     width: '100%',
   },
+  congiunzione:{
+    color: '#000',
+    margin: 3,
+  },
+  link:{
+    fontSize: 17,
+    color: '#004030',
+    margin: 3
+  }
 });
 
 export default App;
