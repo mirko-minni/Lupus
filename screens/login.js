@@ -4,16 +4,54 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button } from 'rea
 import axios from 'axios';
 import { serverLink } from './global/global_variables';
 import { use } from 'express/lib/router';
-import Login from './screens/login';
 
-const App = () => {
+const Login = () => {
+
+  [username, setUsername] = useState([]); 
+  [password, setPassword] = useState([]);
+
+  useEffect(() =>{
+    axios.get(serverLink + `test?username=${username}`)
+    .then(data =>{
+      console.log(data);
+      setUsername(data.data[0].name); 
+    }).catch(err =>{
+      console.log(err);
+    })
+  }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.top} />
-        <Login>
-          
-        </Login>
+      <Text style={[styles.titolo, styles.titleMargin]}>Benvenuto in Lupus in Fabula {username}</Text>
+      <View style={styles.form}>
+        <View style={styles.divTitolo}>
+          <Text style={[styles.titolo, styles.log]}>LOGIN</Text>
+        </View>
+
+        <View style={styles.inputForm}>
+          <Text style={styles.label}>Username</Text>
+          <TextInput style={styles.TxtInput} placeholder="Inserisci username" onChangeText={(value) => setUsername(value)}/>
+        </View>
+
+        <View style={styles.inputForm}>
+          <Text style={styles.label}>Password</Text>
+          <TextInput style={styles.TxtInput} placeholder="Inserisci password" secureTextEntry={true} onChangeText={(value) => setPassword(value)}/>
+        </View>
+
+        <TouchableOpacity onPress={() => {
+           isClicked = setIsClicked(true);
+          }
+        } style={styles.buttonForm}>
+          <Text style={styles.buttonText}>Accedi</Text>
+        </TouchableOpacity>
+        
+        <Text style={styles.congiunzione}>Oppure</Text>
+        <Text style={styles.link} onPress={() => {
+          console.log('hai cliccato');
+        }}>Registrati</Text>
+        
+      </View>
       <StatusBar style="dark-content" />
     </View>
   );
@@ -105,4 +143,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+export default Login;
